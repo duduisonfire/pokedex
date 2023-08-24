@@ -13,6 +13,7 @@ export default class PageController {
 	async loadPage(pokemons: IPokemonList) {
 		const page = document.querySelector('.content');
 		const pokemonList = document.createElement('ol');
+
 		pokemonList.className = 'pokemons';
 		pokemons.results.forEach(async (pokemonName) => {
 			const pokemon = await this.createPokemon(pokemonName);
