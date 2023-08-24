@@ -27,6 +27,24 @@ body {
     margin: 0;
 }
 
+.content div {
+    display: flex;
+    justify-content: space-between;
+}
+
+.content div button {
+    font-weight: bold;
+    background-color: #678fee75;
+    border: none;
+    border-radius: 1rem;
+    width: 6rem;
+}
+
+.content div button:hover {
+    background-color: #678feec4;
+    cursor: pointer;
+}
+
 .pokemons {
     display: grid;
     grid-template-columns: 1fr;

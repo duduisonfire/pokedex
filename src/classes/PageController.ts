@@ -11,7 +11,9 @@ export default class PageController {
 	}
 
 	async loadPage(pokemons: IPokemonList) {
-		const page = document.querySelector('.content');
+		const page = document.querySelector('.content') as Element;
+		page.innerHTML = '<h1>Pokedex</h1>';
+
 		const pokemonList = document.createElement('ol');
 		pokemonList.className = 'pokemons';
 
@@ -21,6 +23,32 @@ export default class PageController {
 		}
 
 		page?.appendChild(pokemonList);
+
+		page.innerHTML += '<div><button class="previous"><</button><button class="next">></button></div>';
+		this.updatePage();
+	}
+
+	private async updatePage() {
+		const previousButton = document.querySelector('.previous');
+		const nextButton = document.querySelector('.next');
+
+		previousButton?.addEventListener('click', async (event) => {
+			event.preventDefault();
+			let pokemonList = await this.api.getPokemonsNextOrPreviousPage('previous');
+
+			if (this.api.previousPage === 'https://pokeapi.co/api/v2/pokemon/?offset=0&&limit=9') {
+				pokemonList = await this.api.getPokemonsFirstPage();
+			}
+
+			this.loadPage(pokemonList);
+		});
+
+		nextButton?.addEventListener('click', async (event) => {
+			event.preventDefault();
+			const pokemonList = await this.api.getPokemonsNextOrPreviousPage('next');
+
+			this.loadPage(pokemonList);
+		});
 	}
 
 	private async createPokemon(pokemon: IPokemonToList) {
