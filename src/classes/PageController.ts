@@ -1,5 +1,6 @@
 import IPokemonElement from '../interfaces/IPokemonElement';
 import IPokemonList from '../interfaces/IPokemonList';
+import IPokemonToList from '../interfaces/IPokemonToList';
 import PokeApi from './PokeApi';
 
 export default class PageController {
@@ -10,31 +11,38 @@ export default class PageController {
 	}
 
 	async loadPage(pokemons: IPokemonList) {
-		const page = document.querySelector('.pokemons');
-
-		pokemons.results.forEach(async (value) => {
-			const pokeInfo = await this.api.getPokemon(value.name);
-			const typeTwo = pokeInfo.types[1];
-			let typeTwoContent = 'nothing';
-
-			if (typeTwo !== undefined) {
-				typeTwoContent = pokeInfo.types[1].type.name;
-			}
-
-			const pokemon = {
-				pokemonName: pokeInfo.name,
-				pokemonNumber: pokeInfo.id,
-				pokemonTypeOne: pokeInfo.types[0].type.name,
-				pokemonTypeTwo: typeTwoContent,
-				pokemonImageUrl: pokeInfo.sprites.other['official-artwork'].front_default,
-			};
-
-			const element = this.createElement(pokemon);
-			page?.appendChild(element);
+		const page = document.querySelector('.content');
+		const pokemonList = document.createElement('ol');
+		pokemonList.className = 'pokemons';
+		pokemons.results.forEach(async (pokemonName) => {
+			const pokemon = await this.createPokemon(pokemonName);
+			pokemonList.appendChild(this.createPokemonElement(pokemon));
 		});
+
+		page?.appendChild(pokemonList);
 	}
 
-	private createElement(pokemon: IPokemonElement) {
+	private async createPokemon(pokemon: IPokemonToList) {
+		const pokeInfo = await this.api.getPokemon(pokemon.name);
+		const typeTwo = pokeInfo.types[1];
+		let typeTwoContent = 'nothing';
+
+		if (typeTwo !== undefined) {
+			typeTwoContent = pokeInfo.types[1].type.name;
+		}
+
+		const myPokemon = {
+			pokemonName: pokeInfo.name,
+			pokemonNumber: pokeInfo.id,
+			pokemonTypeOne: pokeInfo.types[0].type.name,
+			pokemonTypeTwo: typeTwoContent,
+			pokemonImageUrl: pokeInfo.sprites.other['official-artwork'].front_default,
+		};
+
+		return myPokemon;
+	}
+
+	private createPokemonElement(pokemon: IPokemonElement) {
 		const pokemonElement = document.createElement('li');
 		pokemonElement.className = 'pokemon';
 		pokemonElement.innerHTML = `
