@@ -6,7 +6,7 @@ export default class PokeApi {
 	api = HttpRequest;
 
 	async getPokemonsFirstPage() {
-		const pokemonsList = (await this.api.get(`?offset=${0}&&limit=${9}`)).data as IPokemonList;
+		const pokemonsList = (await this.api.get(`?offset=0&&limit=9`)).data as IPokemonList;
 
 		return pokemonsList;
 	}
