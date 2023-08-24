@@ -13,12 +13,12 @@ export default class PageController {
 	async loadPage(pokemons: IPokemonList) {
 		const page = document.querySelector('.content');
 		const pokemonList = document.createElement('ol');
-
 		pokemonList.className = 'pokemons';
-		pokemons.results.forEach(async (pokemonName) => {
-			const pokemon = await this.createPokemon(pokemonName);
+
+		for (let index = 0; index < pokemons.results.length; index++) {
+			const pokemon = await this.createPokemon(pokemons.results[index]);
 			pokemonList.appendChild(this.createPokemonElement(pokemon));
-		});
+		}
 
 		page?.appendChild(pokemonList);
 	}
@@ -45,7 +45,7 @@ export default class PageController {
 
 	private createPokemonElement(pokemon: IPokemonElement) {
 		const pokemonElement = document.createElement('li');
-		pokemonElement.className = 'pokemon';
+		pokemonElement.className = `pokemon ${pokemon.pokemonTypeOne}`;
 		pokemonElement.innerHTML = `
             <span class="number">#${pokemon.pokemonNumber}</span>
             <span class="name">${pokemon.pokemonName}</span>
