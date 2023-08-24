@@ -12,8 +12,8 @@ export default class PageController {
 	async loadPage(pokemons: IPokemonList) {
 		const page = document.querySelector('.pokemons');
 
-		for (let index = 0; index < pokemons.results.length; index++) {
-			const pokeInfo = await this.api.getPokemon(pokemons.results[index].name);
+		pokemons.results.forEach(async (value) => {
+			const pokeInfo = await this.api.getPokemon(value.name);
 			const typeTwo = pokeInfo.types[1];
 			let typeTwoContent = 'nothing';
 
@@ -31,9 +31,7 @@ export default class PageController {
 
 			const element = this.createElement(pokemon);
 			page?.appendChild(element);
-
-			console.log(page);
-		}
+		});
 	}
 
 	private createElement(pokemon: IPokemonElement) {
